@@ -334,3 +334,6 @@ backend/media/
 .env.production
 .env
 .envs/*
+
+# IDE settings
+.vscode/

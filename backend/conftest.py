@@ -14,7 +14,9 @@ from backend.song.test.factories import (
     SongFactory,
     SongLinkFactory,
     LanguageFactory,
-    LyricFactory
+    LyricFactory,
+    LyricRequestFactory,
+    TranslationFactory
 )
 
 @pytest.fixture(autouse=True)
@@ -56,16 +58,16 @@ def dead_artist():
     return ArtistFactory(last_name="Wembadio", is_still_alive=False)
 
 @pytest.fixture
-def song(category, album, artist):
-    return SongFactory(title='ca bouge pas', category=category, album=album, artist=artist)
+def song():
+    return SongFactory(title='ca bouge pas')
 
 @pytest.fixture
-def song_for_dead_artist(dead_artist, category):
-    return SongFactory(title='ca ne bouge pas', artist=dead_artist, category=category)
+def song_for_dead_artist():
+    return SongFactory(title='ca ne bouge pas')
 
 @pytest.fixture
-def song_link(song):
-    return SongLinkFactory(provider='youtube', song=song)
+def song_link():
+    return SongLinkFactory(provider='youtube')
 
 @pytest.fixture
 def language():
@@ -74,3 +76,11 @@ def language():
 @pytest.fixture
 def lyric():
     return LyricFactory()
+
+@pytest.fixture
+def lyric_request():
+    return LyricRequestFactory(message='need the lyric for this song')
+
+@pytest.fixture
+def translation():
+    return TranslationFactory()

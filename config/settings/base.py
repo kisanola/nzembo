@@ -94,7 +94,6 @@ THIRD_PARTY_APPS = [
     "allauth.socialaccount",
     "rest_framework",
     "corsheaders",
-    "graphene_django",
     "django_filters",
     "django_celery_beat",
 ]

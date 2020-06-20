@@ -7,7 +7,9 @@ from backend.song.models import(
     Song,
     SongLink,
     Language,
-    Lyric
+    Lyric,
+    LyricRequest,
+    Translation
 )
 
 
@@ -69,3 +71,15 @@ class LyricSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lyric
         fields = ['id', 'user', 'song', 'language', 'content', 'date_added']
+
+
+class LyricRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LyricRequest
+        fields = ['id', 'user', 'lyric', 'language', 'message', 'date_requested']
+
+
+class TranslationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Translation
+        fields = ['lyric', 'user', 'language', 'tranlation', 'date_added']

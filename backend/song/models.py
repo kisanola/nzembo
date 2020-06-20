@@ -76,3 +76,19 @@ class Lyric(models.Model):
 
     def __str__(self):
         return self.date_added
+
+
+class LyricRequest(models.Model):
+    lyric = models.ForeignKey('Lyric', on_delete=models.CASCADE)
+    user = models.ForeignKey('users.User', on_delete=models.CASCADE)
+    language = models.ForeignKey('Language', on_delete=models.CASCADE)
+    message = models.CharField(max_length=200, null=True)
+    date_requested = models.DateTimeField(auto_now=True)
+
+
+class Translation(models.Model):
+    lyric = models.ForeignKey('Lyric', on_delete=models.CASCADE)
+    user = models.ForeignKey('users.User', on_delete=models.CASCADE)
+    language = models.ForeignKey('Language', on_delete=models.CASCADE)
+    translation = models.TextField()
+    date_added = models.DateTimeField(auto_now=True)
