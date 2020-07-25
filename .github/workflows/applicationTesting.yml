@@ -1,8 +1,12 @@
 name: Nzembo Automation Testing
 
 on:
+  pull_request:
+    branches: [ master ]
+
   push:
-    branches: [ model_creation ]
+    branches:
+      - '*'
 
 jobs:
   build:
