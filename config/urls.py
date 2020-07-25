@@ -38,7 +38,7 @@ urlpatterns += [
 
 # API URLS
 urlpatterns += [
-    # GraphQL
+    re_path(r"^api/v1/", include("backend.song.urls", namespace="song")),
 ]
 
 if settings.DEBUG:

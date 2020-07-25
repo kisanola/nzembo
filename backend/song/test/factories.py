@@ -10,18 +10,19 @@ class CategoryFactory(DjangoModelFactory):
     category_name = factory.Faker('word')
 
 
-class AlbumFactory(DjangoModelFactory):
-    class Meta:
-        model = models.Album
-    album_name = factory.Faker('sentence', nb_words=5)
-
-
 class ArtistFactory(DjangoModelFactory):
     class Meta:
         model = models.Artist
     first_name = factory.Faker('first_name')
     last_name = factory.Faker('last_name')
     is_still_alive = factory.Iterator([True, False])
+
+
+class AlbumFactory(DjangoModelFactory):
+    class Meta:
+        model = models.Album
+    album_name = factory.Faker('sentence', nb_words=5)
+    artist = factory.SubFactory(ArtistFactory)
 
 
 class SongFactory(DjangoModelFactory):
@@ -31,7 +32,6 @@ class SongFactory(DjangoModelFactory):
     category = factory.SubFactory(CategoryFactory)
     album = factory.SubFactory(AlbumFactory)
     artist = factory.SubFactory(ArtistFactory)
-    slug = factory.Faker('slug', value=title)
 
 
 class SongLinkFactory(DjangoModelFactory):
@@ -62,7 +62,7 @@ class LyricRequestFactory(DjangoModelFactory):
     class Meta:
         model = models.LyricRequest
     user = factory.SubFactory(UserFactory)
-    lyric = factory.SubFactory(LyricFactory)
+    song = factory.SubFactory(SongFactory)
     language = factory.SubFactory(LanguageFactory)
     message = factory.Faker('text', max_nb_chars=100)
 

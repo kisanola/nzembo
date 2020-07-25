@@ -26,7 +26,7 @@ def django_db_setup():
 
 @pytest.fixture
 def category():
-    return CategoryFactory(category_name="rumba")
+    return CategoryFactory(category_name="religious")
 
 @pytest.fixture
 def album():
@@ -62,7 +62,7 @@ def lyric():
 
 @pytest.fixture
 def lyric_request():
-    return LyricRequestFactory(message='need the lyric for this song')
+    return LyricRequestFactory(message='I need the lyric for this song')
 
 @pytest.fixture
 def translation():
