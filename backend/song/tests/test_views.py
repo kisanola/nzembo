@@ -1,10 +1,9 @@
 from rest_framework import status
 from rest_framework.test import APITestCase
-from  rest_framework.reverse import reverse
 
 from backend.users.models import User
 
-from backend.song import models
+from backend.song.models import Artist
 
 
 class BaseTestSetUp(APITestCase):
@@ -24,7 +23,7 @@ class BaseTestSetUp(APITestCase):
             'is_still_alive': False,
             'image': 'https://lastfm.freetls.fastly.net/i/u/arO/7de29a9d31b55e3ee367cecf152c0052'
         }
-        self.artist = models.Artist.objects.create(**self.artistInfo)
+        self.artist = Artist.objects.create(**self.artistInfo)
 
         self.albumInfo = {
             'album_name': 'tango to zalaki',

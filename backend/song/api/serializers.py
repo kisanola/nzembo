@@ -1,13 +1,23 @@
 from rest_framework import serializers
 
-from backend.song import models
+from backend.song.models import (
+    Category,
+    Album,
+    Artist,
+    Song,
+    SongLink,
+    Language,
+    Lyric,
+    LyricRequest,
+    Translation
+)
 
 
 class CategorySerializer(serializers.ModelSerializer):
     category_songs = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
     class Meta:
-        model = models.Category
+        model = Category
         fields = ['id', 'category_name', 'date_added', 'category_songs']
 
 
@@ -15,7 +25,7 @@ class AlbumSerializer(serializers.ModelSerializer):
     album_songs = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
     class Meta:
-        model = models.Album
+        model = Album
         fields = ['id', 'album_name', 'artist', 'date_added', 'album_songs']
 
 
@@ -24,7 +34,7 @@ class ArtistSerializer(serializers.ModelSerializer):
     artist_songs = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
     class Meta:
-        model = models.Artist
+        model = Artist
         fields = [
             'id',
             'first_name',
@@ -44,7 +54,7 @@ class SongSerializer(serializers.ModelSerializer):
     song_lyrics = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
     class Meta:
-        model = models.Song
+        model = Song
         fields = [
             'id',
             'title',
@@ -60,7 +70,7 @@ class SongSerializer(serializers.ModelSerializer):
 
 class SongLinkSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.SongLink
+        model = SongLink
         fields = ['id', 'provider', 'link', 'song', 'dete_added']
 
 
@@ -70,7 +80,7 @@ class LanguageSerializer(serializers.ModelSerializer):
     language_lyric = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
     class Meta:
-        model = models.Language
+        model = Language
         fields = [
             'id',
             'language',
@@ -86,19 +96,19 @@ class LyricSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source='user.id')
 
     class Meta:
-        model = models.Lyric
+        model = Lyric
         fields = ['id', 'user', 'song', 'language', 'lyric', 'lyric_translations', 'date_added']
 
 
 class LyricRequestSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source='user.id')
     class Meta:
-        model = models.LyricRequest
+        model = LyricRequest
         fields = ['id', 'user', 'song', 'language', 'message', 'date_added']
 
 
 class TranslationSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source='user.id')
     class Meta:
-        model = models.Translation
+        model = Translation
         fields = ['id', 'lyric', 'user', 'language', 'translation', 'date_added']

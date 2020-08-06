@@ -4,7 +4,7 @@ import config
 
 from config.settings.base import BASE_DIR
 
-from backend.song.test.factories import (
+from backend.song.tests.factories import (
     CategoryFactory,
     AlbumFactory,
     ArtistFactory,

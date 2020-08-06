@@ -1,18 +1,28 @@
 import factory
 
 from factory.django import DjangoModelFactory
-from backend.song import models
+from backend.song.models import (
+    Category,
+    Artist,
+    Album,
+    Song,
+    SongLink,
+    Lyric,
+    LyricRequest,
+    Language,
+    Translation
+)
 from backend.users.tests.factories import UserFactory
 
 class CategoryFactory(DjangoModelFactory):
     class Meta:
-        model = models.Category
+        model = Category
     category_name = factory.Faker('word')
 
 
 class ArtistFactory(DjangoModelFactory):
     class Meta:
-        model = models.Artist
+        model = Artist
     first_name = factory.Faker('first_name')
     last_name = factory.Faker('last_name')
     is_still_alive = factory.Iterator([True, False])
@@ -20,14 +30,14 @@ class ArtistFactory(DjangoModelFactory):
 
 class AlbumFactory(DjangoModelFactory):
     class Meta:
-        model = models.Album
+        model = Album
     album_name = factory.Faker('sentence', nb_words=5)
     artist = factory.SubFactory(ArtistFactory)
 
 
 class SongFactory(DjangoModelFactory):
     class Meta:
-        model = models.Song
+        model = Song
     title = factory.Faker('sentence', nb_words=3)
     category = factory.SubFactory(CategoryFactory)
     album = factory.SubFactory(AlbumFactory)
@@ -36,7 +46,7 @@ class SongFactory(DjangoModelFactory):
 
 class SongLinkFactory(DjangoModelFactory):
     class Meta:
-        model = models.SongLink
+        model = SongLink
     provider = factory.Faker('word')
     link = factory.Faker('url')
     song = factory.SubFactory(SongFactory)
@@ -44,14 +54,14 @@ class SongLinkFactory(DjangoModelFactory):
 
 class LanguageFactory(DjangoModelFactory):
     class Meta:
-        model = models.Language
+        model = Language
 
     language = factory.Faker('language_name')
 
 
 class LyricFactory(DjangoModelFactory):
     class Meta:
-        model = models.Lyric
+        model = Lyric
     user = factory.SubFactory(UserFactory)
     song = factory.SubFactory(SongFactory)
     language = factory.SubFactory(LanguageFactory)
@@ -60,7 +70,7 @@ class LyricFactory(DjangoModelFactory):
 
 class LyricRequestFactory(DjangoModelFactory):
     class Meta:
-        model = models.LyricRequest
+        model = LyricRequest
     user = factory.SubFactory(UserFactory)
     song = factory.SubFactory(SongFactory)
     language = factory.SubFactory(LanguageFactory)
@@ -69,7 +79,7 @@ class LyricRequestFactory(DjangoModelFactory):
 
 class TranslationFactory(DjangoModelFactory):
     class Meta:
-        model = models.Translation
+        model = Translation
     user = factory.SubFactory(UserFactory)
     lyric = factory.SubFactory(LyricFactory)
     language = factory.SubFactory(LanguageFactory)
