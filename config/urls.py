@@ -38,7 +38,7 @@ urlpatterns += [
 
 # API URLS
 urlpatterns += [
-    re_path(r"^api/v1/", include("backend.song.urls", namespace="song")),
+    re_path(r"^api/v1/", include("backend.song.api.urls", namespace="song")),
 ]
 
 if settings.DEBUG:

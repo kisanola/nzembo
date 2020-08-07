@@ -30,7 +30,7 @@ class CategoriesList(generics.ListCreateAPIView):
     filterset_fields = ['category_name',]
 
 
-class CategoryList(generics.RetrieveUpdateDestroyAPIView):
+class CategoriesDetail(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
@@ -43,7 +43,7 @@ class ArtistsList(generics.ListCreateAPIView):
     filterset_fields = ['first_name', 'last_name', 'is_still_alive',]
 
 
-class ArtistList(generics.RetrieveUpdateDestroyAPIView):
+class ArtistsDetail(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = Artist.objects.all()
     serializer_class = ArtistSerializer
@@ -56,7 +56,7 @@ class AlbumsList(generics.ListCreateAPIView):
     filterset_fields = ['album_name', 'artist',]
 
 
-class AlbumList(generics.RetrieveUpdateDestroyAPIView):
+class AlbumsDetail(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = Album.objects.all()
     serializer_class = AlbumSerializer
@@ -69,7 +69,7 @@ class SongsList(generics.ListCreateAPIView):
     filterset_fields = ['title', 'category', 'album', 'artist',]
 
 
-class SongList(generics.RetrieveUpdateDestroyAPIView):
+class SongsDetail(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = Song.objects.all()
     serializer_class = SongSerializer
@@ -82,7 +82,7 @@ class LanguagesList(generics.ListCreateAPIView):
     filterset_fields = ['language',]
 
 
-class LanguageList(generics.RetrieveUpdateDestroyAPIView):
+class LanguagesDetail(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = Language.objects.all()
     serializer_class = LanguageSerializer
@@ -98,7 +98,7 @@ class LyricsList(generics.ListCreateAPIView):
         serializer.save(user=self.request.user)
 
 
-class LyricList(generics.RetrieveUpdateDestroyAPIView):
+class LyricsDetail(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = Lyric.objects.all()
     serializer_class = LyricSerializer
@@ -115,7 +115,7 @@ class LyricRequestsList(generics.ListCreateAPIView):
         serializer.save(user=self.request.user)
 
 
-class LyricRequestList(generics.RetrieveUpdateDestroyAPIView):
+class LyricRequestsDetail(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = LyricRequest.objects.all()
     serializer_class = LyricRequestSerializer
@@ -132,7 +132,7 @@ class TranslationsList(generics.ListCreateAPIView):
         serializer.save(user=self.request.user)
 
 
-class TranslationList(generics.RetrieveUpdateDestroyAPIView):
+class TranslationsDetail(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = Translation.objects.all()
     serializer_class = TranslationSerializer
