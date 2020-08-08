@@ -23,12 +23,6 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: ${{ matrix.python-version }}
-
-    - name: Code Coverage Checker
-      uses: dc740/django-coveragepy-github-action@0.9
-      with:
-        django-app: './backend/song'
-        minimum-coverage: '90'
     
     - name: Install Dependencies
       run: |
