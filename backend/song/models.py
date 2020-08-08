@@ -29,7 +29,7 @@ class Artist(Base):
 
 class Album(Base):
     album_name = models.CharField(max_length=50, unique=True)
-    artist = models.ForeignKey('Artist', related_name='artist_albums', on_delete=models.CASCADE)
+    artist = models.ForeignKey('Artist', related_name='albums', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.album_name
@@ -49,7 +49,7 @@ class Song(Base):
 class SongLink(Base):
     provider = models.CharField(max_length=50)
     link = models.TextField()
-    song = models.ForeignKey('Song', related_name='song_links', on_delete=models.CASCADE)
+    song = models.ForeignKey('Song', related_name='links', on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{ self.provider }, { self.link }"

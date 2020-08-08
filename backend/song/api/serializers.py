@@ -30,7 +30,7 @@ class AlbumSerializer(serializers.ModelSerializer):
 
 
 class ArtistSerializer(serializers.ModelSerializer):
-    artist_albums = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    albums = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     artist_songs = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
     class Meta:
@@ -44,13 +44,13 @@ class ArtistSerializer(serializers.ModelSerializer):
             'date_of_birth',
             'date_of_death',
             'date_added',
-            'artist_albums',
+            'albums',
             'artist_songs',
         ]
 
 
 class SongSerializer(serializers.ModelSerializer):
-    song_links = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    links = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     song_lyrics = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
     class Meta:
@@ -63,7 +63,7 @@ class SongSerializer(serializers.ModelSerializer):
             'artist',
             'date_published',
             'date_added',
-            'song_links',
+            'links',
             'song_lyrics',
         ]
 
