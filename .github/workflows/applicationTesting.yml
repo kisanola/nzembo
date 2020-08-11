@@ -36,6 +36,7 @@ jobs:
     - name: Code Coverage Checking
       uses: tadomikikuto-bit/django-coveragepy-github-action@master
       with:
-        django-app: 'backend/song'
+        django-apps: 'backend/song,backend/users'
         minimum-coverage: '95'
+        requirements-txt: 'requirements/local.txt'
       
