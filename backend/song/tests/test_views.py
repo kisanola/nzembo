@@ -8,7 +8,6 @@ from rest_framework.status import (
     HTTP_204_NO_CONTENT,
     HTTP_403_FORBIDDEN,
 )
-from rest_framework.test import APIClient
 
 from backend.song.models import Artist
 
@@ -16,33 +15,29 @@ from backend.song.models import Artist
 pytestmark = pytest.mark.django_db
 
 
-class TestCategory:
-
-    def generic_get_request(self, url):
-        client = APIClient()
-        return client.get(url)
+class TestCategoryView:
 
     def test_create_category(self, auth, create_category):
 
         assert create_category.status_code == HTTP_201_CREATED
-        assert create_category != {}
+        assert create_category
 
-    def load_category_list(self, create_category):
-        response = self.generic_get_request(reverse('song:categories-list'))
+    def load_category_list(self, create_category, get):
+        response = get(reverse('song:categories-list'))
 
         assert response.status_code == HTTP_200_OK
         assert response.data
-        assert response.data['results'] != []
+        assert response.data['results']
 
-    def test_load_category_list_filtered(self, create_category):
-        response = self.generic_get_request(f"{reverse('song:categories-list')}?category_name=rumba")
+    def test_load_category_list_filtered(self, create_category, get):
+        response = get(f"{reverse('song:categories-list')}?category_name=rumba")
 
         assert response.status_code == HTTP_200_OK
         assert response.data['results'][0]['category_name'] == 'rumba'
-        assert response.data['results'] != []
+        assert response.data['results']
 
-    def test_load_category_detail(self, create_category):
-        response = self.generic_get_request(reverse('song:categories-detail', args=[1]))
+    def test_load_category_detail(self, create_category, get):
+        response = get(reverse('song:categories-detail', args=[1]))
 
         assert response.status_code == HTTP_200_OK
         assert response.data['category_name'] == 'rumba'
@@ -67,7 +62,7 @@ class TestArtistsView:
     def test_creation_of_artist(self, create_artist):
 
         assert create_artist.status_code == HTTP_201_CREATED
-        assert create_artist.data != {}
+        assert create_artist.data
         assert create_artist.data['first_name'] == 'ferre'
 
     def test_loads_artist_list(self, create_artist, get):
@@ -91,7 +86,7 @@ class TestArtistsView:
         assert response.status_code == HTTP_204_NO_CONTENT
 
 
-class TestAlbums:
+class TestAlbumsView:
     def test_creation_of_album(self, artist, create_album):
 
         assert create_album.status_code == HTTP_201_CREATED
@@ -127,12 +122,12 @@ class TestAlbums:
         assert response.status_code == HTTP_204_NO_CONTENT
 
 
-class TestSong:
+class TestSongView:
     def test_creation_of_song(self, category, artist, album, create_song):
 
-        assert album != {}
-        assert category != {}
-        assert artist != {}
+        assert album
+        assert category
+        assert artist
 
         assert create_song.status_code == HTTP_201_CREATED
         assert create_song.data['title'] == 'maboko pamba'
@@ -157,7 +152,7 @@ class TestSong:
         assert response.status_code == HTTP_204_NO_CONTENT
 
 
-class TestLanguage:
+class TestLanguageView:
     def test_creation_of_language(self, create_language):
         
         assert create_language.status_code == HTTP_201_CREATED
@@ -194,11 +189,11 @@ class TestLanguage:
         assert response.status_code == HTTP_204_NO_CONTENT
 
 
-class TestLyric():
+class TestLyricView:
     def test_creation_of_lyric(self, user, language, song, create_lyric):
         
         assert create_lyric.status_code == HTTP_201_CREATED
-        assert create_lyric.data != {}
+        assert create_lyric.data
         assert create_lyric.data['lyric'] == 'Lorem Ipsum is simply dummy text of the printing'
 
     def test_loads_lyrics_list(self, user, song, create_language, create_lyric, get):
@@ -222,7 +217,7 @@ class TestLyric():
         assert response.status_code == HTTP_204_NO_CONTENT
 
 
-class TestLyricRequest():
+class TestLyricRequestView:
     def  test_creation_of_lyric(self, user, language, song, create_lyric_request):
         
         assert create_lyric_request.status_code == HTTP_201_CREATED
@@ -248,15 +243,15 @@ class TestLyricRequest():
         assert response.status_code == HTTP_204_NO_CONTENT
 
 
-class TranslationTestCase():
+class TestTranslationView:
     def  test_creation_of_translation(self, user, language, lyric, create_translation):
 
-        assert create_transaltion.status_code == HTTP_201_CREATED
+        assert create_translation.status_code == HTTP_201_CREATED
         assert create_translation.data['translation'] == 'My translation'
         assert create_translation.data['user'] == user.id
-        assert response.data['lyric'] == lyric.id
+        assert create_translation.data['lyric'] == lyric.id
 
-    def test_loads_translation_list(self, user, language, lyric, create_transaltion, get):
+    def test_loads_translation_list(self, user, language, lyric, create_translation, get):
         response = get(reverse('song:translations-list'))
 
         assert response.status_code == HTTP_200_OK
@@ -264,14 +259,14 @@ class TranslationTestCase():
         assert response.data['results'][0]['lyric'] == lyric.id
         assert response.data['results'][0]['user'] == user.id
 
-    def test_update_translation_put_request(self, user, lyric, language, create_transaltion, update):
+    def test_update_translation_put_request(self, user, lyric, language, create_translation, update):
         response = update(reverse('song:translations-detail', args=[1]), data={'translation': 'My new translation'})
 
         assert response.status_code == HTTP_200_OK
         assert response.data['translation'] == 'My new translation'
         assert response.data['user'] == user.id
 
-    def test_delete_translation_delete_request(self, user, lyric, language, create_transaltion, delete):
+    def test_delete_translation_delete_request(self, user, lyric, language, create_translation, delete):
         response = delete(reverse('song:translations-detail', args=[1]))
 
         assert response.status_code == HTTP_204_NO_CONTENT
