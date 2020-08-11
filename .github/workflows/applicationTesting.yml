@@ -34,7 +34,7 @@ jobs:
         pytest
     
     - name: Code Coverage Checking
-      uses: tadomikikuto-bit/django-coveragepy-github-action
+      uses: tadomikikuto-bit/django-coveragepy-github-action@master
       with:
         django-app: 'backend/song'
         minimum-coverage: '95'
