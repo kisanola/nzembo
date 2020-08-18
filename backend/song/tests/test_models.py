@@ -42,6 +42,7 @@ class TestModel:
     def test_check_song_creation(self, song):
 
         assert song.title == 'ca bouge pas'
+        assert song.slug == 'ca-bouge-pas'
         assert song.album
         assert song.artist
         assert song.category

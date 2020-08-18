@@ -21,13 +21,20 @@ class TestCategoryView:
 
         assert create_category.status_code == HTTP_201_CREATED
         assert create_category
+        assert create_category.data['id']
+        assert create_category.data['category_name']
+        assert create_category.data['date_added']
 
     def load_category_list(self, create_category, get):
         response = get(reverse('song:categories-list'))
 
         assert response.status_code == HTTP_200_OK
         assert response.data
-        assert response.data['results']
+        assert response.data['results'][0]
+        assert response.data['results'][0]['id']
+        assert response.data['results'][0]['category_name']
+        assert response.data['results'][0]['date_added']
+        assert response.data['results'][0]['songs']
 
     def test_load_category_list_filtered(self, create_category, get):
         response = get(f"{reverse('song:categories-list')}?category_name=rumba")
@@ -64,13 +71,28 @@ class TestArtistsView:
         assert create_artist.status_code == HTTP_201_CREATED
         assert create_artist.data
         assert create_artist.data['first_name'] == 'ferre'
+        assert create_artist.data['last_name']
+        assert create_artist.data['is_still_alive']
+        assert create_artist.data['image']
+        assert create_artist.data['date_of_birth']
+        assert not create_artist.data['date_of_death']
 
-    def test_loads_artist_list(self, create_artist, get):
+    def test_load_artist_list(self, create_artist, album, song, get):
         response = get(reverse('song:artists-list'))
 
+        assert album
+        assert song
+
         assert response.status_code == HTTP_200_OK
-        assert response.data['results'][0]['last_name'] == 'gola'
-        assert len(response.data['results']) == 1
+        assert response.data['results'][0]['last_name'] == create_artist.data['last_name']
+        assert response.data['results']
+        assert response.data['results'][0]['first_name']
+        assert response.data['results'][0]['is_still_alive']
+        assert response.data['results'][0]['image']
+        assert response.data['results'][0]['date_of_birth'] == '1976-03-03'
+        assert not response.data['results'][0]['date_of_death']
+        assert not response.data['results'][0]['albums']
+        assert not response.data['results'][0]['songs']
 
     def test_update_artist_put_request(self, create_artist, update):
         id = create_artist.data['id']
@@ -91,14 +113,19 @@ class TestAlbumsView:
 
         assert create_album.status_code == HTTP_201_CREATED
         assert create_album.data['album_name'] == 'tango to zalaki'
+        assert create_album.data['id']
+        assert create_album.data['date_added']
 
-    def test_load_album_list(self, create_artist, create_album, get):
+    def test_load_album_list(self, create_album, song, get):
         response = get(reverse('song:albums-list'))
 
         assert response.status_code == HTTP_200_OK
-        assert response.data['results'][0]['album_name'] == 'tango to zalaki'
+        assert response.data['results'][0]['album_name']
+        assert response.data['results'][0]['songs']
+        assert response.data['results'][0]['artist'] == 1
+        assert response.data['results'][0]['date_added']
 
-    def test_load_album_detail(self, create_artist, create_album, get):
+    def test_load_album_detail(self, artist, create_album, get):
         response = get(reverse('song:albums-detail', args=[1]))
 
         assert response.status_code == HTTP_200_OK
@@ -132,6 +159,7 @@ class TestSongView:
         assert create_song.status_code == HTTP_201_CREATED
         assert create_song.data['title'] == 'maboko pamba'
         assert create_song.data['artist'] == artist.id
+        assert create_song.data['album'] == album.id
 
     def test_loads_songs_list(self, category, artist, album, create_song, get):
         response = get(reverse('song:songs-list'))
@@ -139,15 +167,19 @@ class TestSongView:
         assert response.status_code == HTTP_200_OK
         assert response.data['results'][0]['title'] == 'maboko pamba'
         assert len(response.data['results']) == 1
+        assert not response.data['results'][0]['date_published']
+        assert response.data['results'][0]['date_added']
+        assert not response.data['results'][0]['links']
+        assert not response.data['results'][0]['lyrics']
 
     def test_update_songs_patch_request(self, category, artist, album, create_song, update):
-        response = update(reverse('song:songs-detail', args=[1]), data={'title': 'malewa'})
+        response = update(reverse('song:songs-detail', kwargs={'slug': 'maboko-pamba'}), data={'title': 'malewa'})
 
         assert response.status_code == HTTP_200_OK
         assert response.data['title'] == 'malewa'
 
     def test_delete_songs_delete_request(self, category, artist, album, create_song, delete):
-        response = delete(reverse('song:songs-detail', args=[1]))
+        response = delete(reverse('song:songs-detail', kwargs={'slug': 'maboko-pamba'}))
         
         assert response.status_code == HTTP_204_NO_CONTENT
 
@@ -164,14 +196,19 @@ class TestLanguageView:
         assert response.status_code == HTTP_200_OK
         assert response.data['results'][0]['language'] == 'french'
         assert len(response.data['results']) == 1
+        assert response.data['results'][0]['id']
+        assert not response.data['results'][0]['translations']
+        assert not response.data['results'][0]['lyric_requests']
+        assert not response.data['results'][0]['lyrics']
+        assert response.data['results'][0]['date_added']
 
-    def test_load_album_detail(self, create_language, get):
+    def test_load_language_detail(self, create_language, get):
         response = get(reverse('song:languages-detail', args=[1]))
 
         assert response.status_code == HTTP_200_OK
         assert response.data['language'] == 'french'
 
-    def test_load_album_list_filtered(self, create_language, get):
+    def test_load_language_list_filtered(self, create_language, get):
         response = get(f"{reverse('song:languages-list')}?language=french")
 
         assert response.status_code == HTTP_200_OK
@@ -196,13 +233,18 @@ class TestLyricView:
         assert create_lyric.data
         assert create_lyric.data['lyric'] == 'Lorem Ipsum is simply dummy text of the printing'
 
-    def test_loads_lyrics_list(self, user, song, create_language, create_lyric, get):
+    def test_loads_lyrics_list(self, user, song, language, create_lyric, get):
         response = get(reverse('song:lyrics-list'))
 
         assert response.status_code == HTTP_200_OK
         assert response.data['results'][0]['lyric'] == 'Lorem Ipsum is simply dummy text of the printing'
         assert response.data['results'][0]['user'] == user.id
         assert len(response.data['results']) == 1
+        assert response.data['results'][0]['id']
+        assert response.data['results'][0]['song'] == song.id
+        assert response.data['results'][0]['language'] == language.id
+        assert not response.data['results'][0]['translations']
+        assert response.data['results'][0]['date_added']
 
     def test_update_lyrics_put_request(self, user, song, language, create_lyric, update):
         response = update(reverse('song:lyrics-detail', args=[1]), data={'lyric': 'this is my new lyric'})
@@ -229,6 +271,10 @@ class TestLyricRequestView:
         assert response.status_code == HTTP_200_OK
         assert response.data['results'][0]['message'] == 'I need a lyric for this song'
         assert response.data['results'][0]['user'] == user.id
+        assert response.data['results'][0]['id']
+        assert response.data['results'][0]['song'] == song.id
+        assert response.data['results'][0]['language'] == language.id
+        assert response.data['results'][0]['date_added']
 
     def test_update_lyric_request_patch_request(self, user, language, song, create_lyric_request, update):
         response = update(reverse('song:lyric-requests-detail', args=[1]), data={'message': 'my updated message'})
@@ -258,6 +304,9 @@ class TestTranslationView:
         assert response.data['results'][0]['translation'] == 'My translation'
         assert response.data['results'][0]['lyric'] == lyric.id
         assert response.data['results'][0]['user'] == user.id
+        assert response.data['results'][0]['id']
+        assert response.data['results'][0]['language'] == language.id
+        assert response.data['results'][0]['date_added']
 
     def test_update_translation_put_request(self, user, lyric, language, create_translation, update):
         response = update(reverse('song:translations-detail', args=[1]), data={'translation': 'My new translation'})

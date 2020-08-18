@@ -2,6 +2,8 @@ import os
 import pytest
 import config
 
+from datetime import date
+
 from django.urls import reverse
 
 from rest_framework.test import APIClient
@@ -117,6 +119,7 @@ def create_artist():
         'first_name': 'ferre',
         'last_name': 'gola',
         'is_still_alive': True,
+        'date_of_birth': date(1976, 3, 3),
         'image': 'https://lastfm.freetls.fastly.net/i/u/arO/7de29a9d31b55e3ee367cecf152c0052'
     }
     return client_.post(reverse('song:artists-list'), data=artist_, format='json')

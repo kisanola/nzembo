@@ -73,6 +73,7 @@ class SongsDetail(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = Song.objects.all()
     serializer_class = SongSerializer
+    lookup_field = 'slug'
 
 
 class LanguagesList(generics.ListCreateAPIView):

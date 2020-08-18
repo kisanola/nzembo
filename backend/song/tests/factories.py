@@ -39,6 +39,7 @@ class SongFactory(DjangoModelFactory):
     class Meta:
         model = Song
     title = factory.Faker('sentence', nb_words=3)
+    slug = factory.Faker('slug', value=title)
     category = factory.SubFactory(CategoryFactory)
     album = factory.SubFactory(AlbumFactory)
     artist = factory.SubFactory(ArtistFactory)

@@ -14,24 +14,47 @@ from backend.song.models import (
 
 
 class CategorySerializer(serializers.ModelSerializer):
-    category_songs = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    songs = serializers.HyperlinkedRelatedField(
+        many=True,
+        read_only=True,
+        view_name='song:songs-detail',
+        lookup_field='slug'
+    )
 
     class Meta:
         model = Category
-        fields = ['id', 'category_name', 'date_added', 'category_songs']
+        fields = ['id', 'category_name', 'date_added', 'songs']
+        lookup_field = 'slug'
+        extra_kwargs = {
+            'songs': {'lookup_field': 'slug'}
+        }
 
 
 class AlbumSerializer(serializers.ModelSerializer):
-    album_songs = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    songs = serializers.HyperlinkedRelatedField(
+        many=True,
+        read_only=True,
+        view_name='song:songs-detail',
+        lookup_field='slug'
+    )
 
     class Meta:
         model = Album
-        fields = ['id', 'album_name', 'artist', 'date_added', 'album_songs']
+        fields = ['id', 'album_name', 'artist', 'date_added', 'songs']
 
 
 class ArtistSerializer(serializers.ModelSerializer):
-    albums = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-    artist_songs = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    albums = serializers.HyperlinkedRelatedField(
+        many=True,
+        read_only=True,
+        view_name='song:albums-detail'
+    )
+    songs = serializers.HyperlinkedRelatedField(
+        many=True,
+        read_only=True,
+        view_name='song:songs-detail',
+        lookup_field='slug'
+    )
 
     class Meta:
         model = Artist
@@ -45,18 +68,22 @@ class ArtistSerializer(serializers.ModelSerializer):
             'date_of_death',
             'date_added',
             'albums',
-            'artist_songs',
+            'songs',
         ]
 
 
 class SongSerializer(serializers.ModelSerializer):
     links = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-    song_lyrics = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    lyrics = serializers.HyperlinkedRelatedField(
+        many=True,
+        read_only=True,
+        view_name='song:lyrics-detail'
+    )
 
     class Meta:
         model = Song
         fields = [
-            'id',
+            'slug',
             'title',
             'category',
             'album',
@@ -64,40 +91,56 @@ class SongSerializer(serializers.ModelSerializer):
             'date_published',
             'date_added',
             'links',
-            'song_lyrics',
+            'lyrics',
         ]
 
 
 class SongLinkSerializer(serializers.ModelSerializer):
     class Meta:
         model = SongLink
-        fields = ['id', 'provider', 'link', 'song', 'dete_added']
+        fields = ['id', 'provider', 'link', 'song', 'date_added']
 
 
 class LanguageSerializer(serializers.ModelSerializer):
-    language_translations = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-    language_lyric_requests = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-    language_lyric = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    translations = serializers.HyperlinkedRelatedField(
+        many=True,
+        read_only=True,
+        view_name='song:translations-detail'
+    )
+    lyric_requests = serializers.HyperlinkedRelatedField(
+        many=True,
+        read_only=True,
+        view_name='song:lyric-requests-detail'
+    )
+    lyrics = serializers.HyperlinkedRelatedField(
+        many=True,
+        read_only=True,
+        view_name='song:lyrics-detail'
+    )
 
     class Meta:
         model = Language
         fields = [
             'id',
             'language',
-            'language_translations',
-            'language_lyric_requests',
-            'language_lyric',
+            'translations',
+            'lyric_requests',
+            'lyrics',
             'date_added',
         ]
 
 
 class LyricSerializer(serializers.ModelSerializer):
-    lyric_translations = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    translations = serializers.HyperlinkedRelatedField(
+        many=True,
+        read_only=True,
+        view_name='song:translations-detail'
+    )
     user = serializers.ReadOnlyField(source='user.id')
 
     class Meta:
         model = Lyric
-        fields = ['id', 'user', 'song', 'language', 'lyric', 'lyric_translations', 'date_added']
+        fields = ['id', 'user', 'song', 'language', 'lyric', 'translations', 'date_added']
 
 
 class LyricRequestSerializer(serializers.ModelSerializer):
