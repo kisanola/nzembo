@@ -2,13 +2,13 @@ import pytest
 
 from backend.song.models import (
     Category,
-    Album,
     Artist,
+    Album,
+    Lyric,
+    LyricRequest,
     Song,
     SongLink,
     Language,
-    Lyric,
-    LyricRequest,
     Translation
 )
 
@@ -17,7 +17,7 @@ pytestmark = pytest.mark.django_db
 class TestModel:
     def test_check_category_creation(self, category):
 
-        assert category.category_name == "rumba"
+        assert category.category_name == "religious"
         assert isinstance(category, (Category))
 
     def test_check_album_creation(self, album):
@@ -50,7 +50,6 @@ class TestModel:
 
     def test_check_song_creation_for_dead_artist(self, song_for_dead_artist):
 
-        assert song_for_dead_artist.slug == 'ca-ne-bouge-pas'
         assert song_for_dead_artist.category
         assert song_for_dead_artist.artist
         assert isinstance(song_for_dead_artist, (Song))
@@ -76,9 +75,9 @@ class TestModel:
 
     def test_check_lyric_request_creation(self, lyric_request):
 
-        assert lyric_request.message == 'need the lyric for this song'
+        assert lyric_request.message == 'I need the lyric for this song'
         assert lyric_request.user
-        assert lyric_request.lyric
+        assert lyric_request.song
         assert lyric_request.language
         assert isinstance(lyric_request, (LyricRequest))
 
