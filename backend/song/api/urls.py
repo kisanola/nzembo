@@ -1,7 +1,6 @@
 from django.urls import path, re_path
 
 from rest_framework import permissions
-from rest_framework.urlpatterns import format_suffix_patterns
 
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -29,11 +28,11 @@ app_name = 'song'
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="Snippets API",
+        title="Nzembo API",
         default_version='v1',
-        description="Test description",
+        description="Nzembo is a platform that allows people to share lyrics, translations of CD songs",
         terms_of_service="https://www.google.com/policies/terms/",
-        contact=openapi.Contact(email="contact@snippets.local"),
+        contact=openapi.Contact(email="makutanolucien@gmail.com"),
         license=openapi.License(name="BSD License"),
     ),
     public=True,
@@ -61,5 +60,3 @@ urlpatterns = [
     path('translations/', TranslationsList.as_view(), name='translations-list'),
     path('translations/<int:pk>/', TranslationsDetail.as_view(), name='translations-detail'),
 ]
-
-# urlpatterns = format_suffix_patterns(urlpatterns)
