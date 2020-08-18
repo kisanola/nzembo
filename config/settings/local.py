@@ -65,5 +65,8 @@ INSTALLED_APPS += ["django_extensions"]  # noqa F405
 
 # http://docs.celeryproject.org/en/latest/userguide/configuration.html#task-eager-propagates
 CELERY_TASK_EAGER_PROPAGATES = True
-# Your stuff...
+
+# https://github.com/axnsan12/drf-yasg
+# https://drf-yasg.readthedocs.io/en/stable/
 # ------------------------------------------------------------------------------
+INSTALLED_APPS += ["drf_yasg"]

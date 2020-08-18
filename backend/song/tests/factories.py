@@ -57,7 +57,7 @@ class LanguageFactory(DjangoModelFactory):
     class Meta:
         model = Language
 
-    language = factory.Faker('language_name')
+    language = factory.Faker('text')
 
 
 class LyricFactory(DjangoModelFactory):

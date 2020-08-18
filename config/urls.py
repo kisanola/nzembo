@@ -4,10 +4,28 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.views.generic import TemplateView
 from django.views import defaults as default_views
+
+from rest_framework import permissions
 from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework.documentation import include_docs_urls
 
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
 
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Nzembo API",
+        default_version='v1',
+        description="Nzembo is a platform that allows people to share lyrics, translations of CD songs",
+        terms_of_service="https://www.google.com/policies/terms/",
+        contact=openapi.Contact(
+            email="espoir.mur@gmail.com", name="Espoir Murhabazi", url="https://murhabazi.com/"
+        ),
+        license=openapi.License(name="BSD License"),
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny,),
+)
 
 
 urlpatterns = [
@@ -39,6 +57,13 @@ urlpatterns += [
 # API URLS
 urlpatterns += [
     re_path(r"^api/v1/", include("backend.song.api.urls", namespace="song")),
+]
+
+# SWAGGER URLS
+urlpatterns += [
+    re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    re_path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
 
 if settings.DEBUG:

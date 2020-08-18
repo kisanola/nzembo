@@ -1,9 +1,6 @@
-from django.urls import path, re_path
+from django.urls import path
 
-from rest_framework import permissions
-
-from drf_yasg.views import get_schema_view
-from drf_yasg import openapi
+from rest_framework.urlpatterns import format_suffix_patterns
 
 from backend.song.api.views import (
     CategoriesList,
@@ -26,23 +23,7 @@ from backend.song.api.views import (
 
 app_name = 'song'
 
-schema_view = get_schema_view(
-    openapi.Info(
-        title="Nzembo API",
-        default_version='v1',
-        description="Nzembo is a platform that allows people to share lyrics, translations of CD songs",
-        terms_of_service="https://www.google.com/policies/terms/",
-        contact=openapi.Contact(email="makutanolucien@gmail.com"),
-        license=openapi.License(name="BSD License"),
-    ),
-    public=True,
-    permission_classes=(permissions.AllowAny,),
-)
-
 urlpatterns = [
-    re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
-    re_path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path('categories/', CategoriesList.as_view(), name='categories-list'),
     path('categories/<int:pk>/', CategoriesDetail.as_view(), name='categories-detail'),
     path('artists/', ArtistsList.as_view(), name='artists-list'),
@@ -60,3 +41,5 @@ urlpatterns = [
     path('translations/', TranslationsList.as_view(), name='translations-list'),
     path('translations/<int:pk>/', TranslationsDetail.as_view(), name='translations-detail'),
 ]
+
+urlpatterns = format_suffix_patterns(urlpatterns)

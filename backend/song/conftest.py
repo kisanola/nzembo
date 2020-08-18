@@ -1,8 +1,8 @@
+from datetime import date
+
 import os
 import pytest
 import config
-
-from datetime import date
 
 from django.urls import reverse
 
@@ -22,7 +22,7 @@ from backend.song.tests.factories import (
     TranslationFactory
 )
 
-from backend.users.models import User
+from backend.users.tests.factories import UserFactory
 
 # tells pytest to conntect the existing sqlitedb instead of postgres
 @pytest.fixture(scope='session')
@@ -86,21 +86,11 @@ def translation():
 
 @pytest.fixture
 def user():
-    return User.objects.create_user(
-            username="test",
-            email="test@nzembo.msc",
-            name="test user",
-            password="strongP@sswor2"
-        )
+    return UserFactory()
 
 @pytest.fixture
 def auth():
-    client_.force_authenticate(user=User.objects.create_user(
-            username="test",
-            email="test@nzembo.msc",
-            name="test user",
-            password="strongP@sswor2"
-        ))
+    client_.force_authenticate(user=UserFactory())
 
 @pytest.fixture
 def logout():
