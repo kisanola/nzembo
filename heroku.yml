@@ -14,4 +14,3 @@ release:
   image: web
 run:
   web: docker-files/production/django/start
-
