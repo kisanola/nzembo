@@ -16,4 +16,6 @@ django-redis==4.11.0
 djangorestframework==3.11.0  
 coreapi==2.3.3  
 django-cors-headers==3.2.1  
-django-filter==2.2.0  
+django-filter==2.2.0
+django-heroku==0.3.1
+

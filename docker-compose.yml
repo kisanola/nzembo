@@ -6,9 +6,10 @@ volumes:
 
 services:
   django: &django
+    restart: always
     build:
       context: .
-      dockerfile: ./compose/local/django/Dockerfile
+      dockerfile: ./docker-files/local/django/Dockerfile
     image: backend_local_django
     depends_on:
       - postgres
@@ -22,9 +23,10 @@ services:
     command: /start
 
   postgres:
+    restart: always
     build:
       context: .
-      dockerfile: ./compose/production/postgres/Dockerfile
+      dockerfile: ./docker-files/production/postgres/Dockerfile
     image: backend_production_postgres
     volumes:
       - local_postgres_data:/var/lib/postgresql/data
@@ -37,6 +39,7 @@ services:
 
   celeryworker:
     <<: *django
+    restart: always
     image: backend_local_celeryworker
     depends_on:
       - redis
@@ -47,6 +50,7 @@ services:
 
   celerybeat:
     <<: *django
+    restart: always
     image: backend_local_celerybeat
     depends_on:
       - redis
@@ -57,6 +61,7 @@ services:
 
   flower:
     <<: *django
+    restart: always
     image: backend_local_flower
     ports:
       - "5555:5555"

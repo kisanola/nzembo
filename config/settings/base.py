@@ -3,6 +3,7 @@ Base settings to build other settings files upon.
 """
 import os
 import environ
+from heroku_django import settings
 
 ROOT_DIR = (
     environ.Path(__file__) - 3
@@ -48,10 +49,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    },
-    'production': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': os.environ.get('POSTGRES_DB'),
         'USER': os.environ.get('POSTGRES_USER'),
@@ -354,3 +351,5 @@ REST_FRAMEWORK = {
 CORS_ORIGIN_ALLOW_ALL = True
 # Your stuff...
 # ------------------------------------------------------------------------------
+# Configure Django App for Heroku.
+settings(locals())
