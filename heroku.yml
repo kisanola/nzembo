@@ -7,7 +7,6 @@ setup:
 build:
   docker:
     web: docker-files/production/django/Dockerfile
-    traefik: docker-files/production/traefik/Dockerfile
 release:
   command:
     - python manage.py migrate
