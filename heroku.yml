@@ -5,7 +5,7 @@ setup:
     - plan: heroku-redis
       as: CACHE
 build:
-  context: .
+  context-path: .
   docker:
     web: docker-files/production/django/Dockerfile
     traefik: docker-files/production/traefik/Dockerfile
