@@ -3,9 +3,8 @@ setup:
     - plan: heroku-postgresql
       as: DATABASE
     - plan: heroku-redis
-      as: CACHE
+      as: REDIS
 build:
-  context-path: .
   docker:
     web: docker-files/production/django/Dockerfile
     traefik: docker-files/production/traefik/Dockerfile
