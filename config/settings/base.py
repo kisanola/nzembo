@@ -3,8 +3,7 @@ Base settings to build other settings files upon.
 """
 import os
 import environ
-
-from django_heroku import settings
+import dj_database_url
 
 ROOT_DIR = (
     environ.Path(__file__) - 3
@@ -49,18 +48,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get('POSTGRES_DB'),
-        'USER': os.environ.get('POSTGRES_USER'),
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
-        'HOST': os.environ.get('POSTGRES_HOST', 'localhost'),
-        'PORT': os.environ.get('POSTGRES_PORT', '5432'),
-        'SSL_MODE': os.environ.get('POSTGRES_SSLMODE', 'disable'),
-        'TEST': {
-            'NAME': 'song_lyrics_test'
-        }
-    },
+    'default': dj_database_url.config(conn_max_age=600),
 }
 
 
@@ -352,5 +340,4 @@ REST_FRAMEWORK = {
 CORS_ORIGIN_ALLOW_ALL = True
 # Your stuff...
 # ------------------------------------------------------------------------------
-# Configure Django App for Heroku.
-settings(locals())
+

@@ -52,6 +52,7 @@ class TestModel:
 
         assert song_for_dead_artist.category
         assert song_for_dead_artist.artist
+        assert not song_for_dead_artist.artist.is_still_alive
         assert isinstance(song_for_dead_artist, (Song))
 
     def test_check_songLink_creation(self, song_link):
