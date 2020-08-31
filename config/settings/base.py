@@ -55,7 +55,7 @@ if os.environ.get('GITHUB_WORKFLOW'):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'demo',
+            'NAME': 'ctest',
             'USER': 'ctest',
             'PASSWORD': 'coveragetest123',
             'HOST': '127.0.0.1',
