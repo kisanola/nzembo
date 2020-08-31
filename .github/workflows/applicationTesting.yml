@@ -18,9 +18,9 @@ jobs:
       postgres:
         image: postgres:10.8
         env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: github_actions
+          POSTGRES_USER: ctest
+          POSTGRES_PASSWORD: coveragetest123
+          POSTGRES_DB: demo
         ports:
           - 5432:5432
         # needed because the postgres container does not provide a healthcheck
