@@ -1,6 +1,5 @@
-from .base import *  # noqa
 from environ import Env
-import os
+from .base import *  # noqa
 
 env = Env()
 
