@@ -1,0 +1,33 @@
+name: Deploy nzembo image to heroku registry
+
+on:
+
+  push: [ master ]
+
+jobs:
+
+  deploy:
+
+    runs-on: ubuntu-latest
+
+    step:
+    - uses: actions/checkout@v2
+
+    - name: heroku login
+      env:
+        TOKEN: ${{ secrets.HEROKU_APP_TOKEN }}
+        USER: ${{ secrets.HEROKU_USER }}
+      
+      run: docker login --username=$USER --password=$TOKEN registry.heroku.com
+
+    - name: build docker image
+      env:
+        APP: ${{ secrets.HEROKU_APP_NAME }}
+      
+      run: docker build -t registry.heroku.com/$APP/web -f docker-files/production/django/Dockerfile .
+
+    - name: push docker image to heroku registry
+      env:
+        APP: ${{ secrets.HEROKU_APP_NAME }}
+      
+      run: docker push registry.heroku.com/$APP/web
