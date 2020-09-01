@@ -52,7 +52,6 @@ jobs:
     
     - name: Code Coverage Checking
       uses: tadomikikuto-bit/django-coveragepy-github-action@master
-      run: python manage.py migrate
       with:
         django-apps: 'backend/song,backend/users'
         minimum-coverage: '95'
