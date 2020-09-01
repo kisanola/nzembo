@@ -53,14 +53,10 @@ DATABASES = {
 
 if os.environ.get('GITHUB_WORKFLOW'):
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'ctest',
-            'USER': 'ctest',
-            'PASSWORD': 'coveragetest123',
-            'HOST': '127.0.0.1',
-            'PORT': '5432',
-        }
+        'default': dj_database_url.parse(
+            'postgresql://db_admin:8935a847a2dbdcdd78181d6342733913@127.0.0.1:5432/coverage_test',
+            conn_max_age=600
+        )
     }
 
 

@@ -18,8 +18,9 @@ jobs:
       postgres:
         image: postgres:10.8
         env:
-          POSTGRES_USER: ctest
-          POSTGRES_PASSWORD: coveragetest123
+          POSTGRES_USER: ${{ secrets.POSTGRES_DB_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_DB_PASS }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB_NAME }}
         ports:
           - 5432:5432
         # needed because the postgres container does not provide a healthcheck
@@ -28,7 +29,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
+    - name: Set up Python python-version
       uses: actions/setup-python@v1
       with:
         python-version: 3.6
@@ -51,6 +52,7 @@ jobs:
     
     - name: Code Coverage Checking
       uses: tadomikikuto-bit/django-coveragepy-github-action@master
+      run: python manage.py migrate
       with:
         django-apps: 'backend/song,backend/users'
         minimum-coverage: '95'
