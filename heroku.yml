@@ -1,0 +1,16 @@
+setup:
+  addons:
+    - plan: heroku-postgresql
+      as: DATABASE
+    - plan: heroku-redis
+      as: REDIS
+build:
+  docker:
+    web: docker-files/production/django/Dockerfile
+    traefik: docker-files/production/traefik/Dockerfile
+release:
+  command:
+    - python manage.py migrate
+  image: web
+run:
+  web: docker-files/production/django/start

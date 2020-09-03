@@ -9,7 +9,7 @@ services:
   django: &django
     build:
       context: .
-      dockerfile: ./compose/production/django/Dockerfile
+      dockerfile: ./docker-files/production/django/Dockerfile
     image: backend_production_django
     depends_on:
       - postgres
@@ -22,7 +22,7 @@ services:
   postgres:
     build:
       context: .
-      dockerfile: ./compose/production/postgres/Dockerfile
+      dockerfile: ./docker-files/production/postgres/Dockerfile
     image: backend_production_postgres
     volumes:
       - production_postgres_data:/var/lib/postgresql/data
@@ -33,7 +33,7 @@ services:
   traefik:
     build:
       context: .
-      dockerfile: ./compose/production/traefik/Dockerfile
+      dockerfile: ./docker-files/production/traefik/Dockerfile
     image: backend_production_traefik
     depends_on:
       - django
@@ -62,5 +62,3 @@ services:
     ports:
       - "5555:5555"
     command: /start-flower
-
-  

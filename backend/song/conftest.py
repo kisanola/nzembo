@@ -62,7 +62,7 @@ def song():
 
 @pytest.fixture
 def song_for_dead_artist():
-    return SongFactory(title='ca ne bouge pas')
+    return SongFactory(title='ca ne bouge pas', artist=ArtistFactory(is_still_alive=False))
 
 @pytest.fixture
 def song_link():
@@ -89,8 +89,8 @@ def user():
     return UserFactory()
 
 @pytest.fixture
-def auth():
-    client_.force_authenticate(user=UserFactory())
+def auth(user):
+    client_.force_authenticate(user=user)
 
 @pytest.fixture
 def logout():
@@ -115,10 +115,10 @@ def create_artist():
     return client_.post(reverse('song:artists-list'), data=artist_, format='json')
 
 @pytest.fixture
-def create_album():
+def create_album(artist):
     album_ = {
         'album_name': 'tango to zalaki',
-        'artist': 1
+        'artist': artist.id
     }
     return client_.post(reverse('song:albums-list'), data=album_, format='json')
 
@@ -130,38 +130,38 @@ def create_language():
     return client_.post(reverse('song:languages-list'), data=language_, format='json')
 
 @pytest.fixture
-def create_song():
+def create_song(category, album, artist):
     song_ = {
         'title': 'maboko pamba',
-        'category': 1,
-        'album': 1,
-        'artist': 1
+        'category': category.id,
+        'album': album.id,
+        'artist': artist.id
     }
     return client_.post(reverse('song:songs-list'), data=song_, format='json')
 
 @pytest.fixture
-def create_lyric():
+def create_lyric(song, language):
     lyric_ = {
         'lyric': "Lorem Ipsum is simply dummy text of the printing",
-        'song': 1,
-        'language': 1
+        'song': song.id,
+        'language': language.id
     }
     return client_.post(reverse('song:lyrics-list'), data=lyric_, format='json')
 
 @pytest.fixture
-def create_lyric_request():
+def create_lyric_request(song, language):
     lyric_request_ = {
-        'song': 1,
-        'language': 1,
+        'song': song.id,
+        'language': language.id,
         'message': "I need a lyric for this song"
     }
     return client_.post(reverse('song:lyric-requests-list'), data=lyric_request_, format='json')
 
 @pytest.fixture
-def create_translation():
+def create_translation(lyric, language):
     translation_ = {
-        'lyric': 1,
-        'language': 1,
+        'lyric': lyric.id,
+        'language': language.id,
         'translation': "My translation"
     }
     return client_.post(reverse('song:translations-list'), data=translation_, format='json')

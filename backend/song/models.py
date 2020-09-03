@@ -24,7 +24,7 @@ class Artist(Base):
 
 
 class Album(Base):
-    album_name = models.CharField(max_length=50, unique=True)
+    album_name = models.CharField(max_length=255, unique=True)
     artist = models.ForeignKey('Artist', related_name='albums', on_delete=models.CASCADE)
 
 
