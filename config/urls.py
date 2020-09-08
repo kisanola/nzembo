@@ -56,7 +56,8 @@ urlpatterns += [
 
 # API URLS
 urlpatterns += [
-    re_path(r"^api/v1/", include("backend.song.api.urls", namespace="song")),
+    re_path(r"^api/v1/song/", include("backend.song.api.urls", namespace="song")),
+    re_path(r"^api/v1/users/", include("backend.users.api.urls", namespace="users_api")),
 ]
 
 # SWAGGER URLS
