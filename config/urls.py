@@ -31,36 +31,22 @@ schema_view = get_schema_view(
 urlpatterns = [
     path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
     re_path(r'^app/(?P<route>.*)$', TemplateView.as_view(template_name="index.html"), name='app'),
-
-    # User management from django-all-auth
     path("about/", TemplateView.as_view(template_name="pages/about.html"), name="about"),
     path("users/", include("backend.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
-
-    # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
-
-    # Your stuff: custom urls includes go here
-
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-# API URLS
 urlpatterns += [
-    # API base url
     path("api/", include("config.api_router")),
-    # DRF auth token
     path("auth-token/", obtain_auth_token),
-    # DRF API docs
     path("api-docs/", include_docs_urls(title="backend REST API", public=False)),
 ]
 
-# API URLS
 urlpatterns += [
     re_path(r"^api/v1/song/", include("backend.song.api.urls", namespace="song")),
     re_path(r"^api/v1/users/", include("backend.users.api.urls", namespace="users_api")),
 ]
-
-# SWAGGER URLS
 urlpatterns += [
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     re_path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
