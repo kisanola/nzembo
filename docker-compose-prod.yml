@@ -15,10 +15,8 @@ services:
       - postgres
       - redis
     env_file:
-      - ./.envs/.production/.django
-      - ./.envs/.production/.postgres
+      - ./.env.production
     command: /start
-
   postgres:
     build:
       context: .
@@ -28,34 +26,27 @@ services:
       - production_postgres_data:/var/lib/postgresql/data
       - production_postgres_data_backups:/backups
     env_file:
-      - ./.envs/.production/.postgres
-
-  traefik:
-    build:
-      context: .
-      dockerfile: ./docker-files/production/traefik/Dockerfile
-    image: backend_production_traefik
+      - ./.env.production
+  nginx:
+    build: ./production/nginx
+    ports:
+     - "81:80"
+     - "8081:8080"
+    expose:
+      - '81'
+      - '8081'
     depends_on:
       - django
-    volumes:
-      - production_traefik:/etc/traefik/acme
-    ports:
-      - "0.0.0.0:80:80"
-      - "0.0.0.0:443:443"
-
   redis:
     image: redis:5.0
-
-  celeryworker:
+  celery_worker:
     <<: *django
     image: backend_production_celeryworker
     command: /start-celeryworker
-
-  celerybeat:
+  celery_beat:
     <<: *django
     image: backend_production_celerybeat
     command: /start-celerybeat
-
   flower:
     <<: *django
     image: backend_production_flower
