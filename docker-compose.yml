@@ -2,8 +2,6 @@ version: '3'
 
 volumes:
   local_postgres_data: {}
-  local_postgres_data_backups: {}
-
 services:
   django: &django
     restart: always
@@ -22,15 +20,14 @@ services:
     command: /start
   postgres:
     restart: always
-    build:
-      context: .
-      dockerfile: ./docker-files/production/postgres/Dockerfile
-    image: backend_production_postgres
+    image: postgres:latest
     volumes:
-      - local_postgres_data:/var/lib/postgresql/data
-      - local_postgres_data_backups:/backups
-    env_file:
-      - ./.env
+      - local_postgres_data:/var/lib/postgresql/data/
+    env_file: .env
+    ports:
+      - "5433:5432"
+    expose:
+      - '5432'
 
   redis:
     image: redis:5.0

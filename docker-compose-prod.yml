@@ -2,8 +2,6 @@ version: '3'
 
 volumes:
   production_postgres_data: {}
-  production_postgres_data_backups: {}
-  production_traefik: {}
 
 services:
   django: &django
@@ -18,15 +16,15 @@ services:
       - ./.env.production
     command: /start
   postgres:
-    build:
-      context: .
-      dockerfile: ./docker-files/production/postgres/Dockerfile
-    image: backend_production_postgres
+    restart: always
+    image: postgres:latest
     volumes:
-      - production_postgres_data:/var/lib/postgresql/data
-      - production_postgres_data_backups:/backups
-    env_file:
-      - ./.env.production
+      - production_postgres_data:/var/lib/postgresql/data/
+    env_file: ./.env.production
+    ports:
+      - "5433:5432"
+    expose:
+      - '5432'
   nginx:
     build: ./production/nginx
     ports:

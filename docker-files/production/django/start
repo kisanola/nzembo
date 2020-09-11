@@ -5,5 +5,5 @@ set -o pipefail
 set -o nounset
 
 
-python /app/manage.py collectstatic --noinput
-/usr/local/bin/gunicorn config.wsgi --bind 0.0.0.0:$PORT --chdir=/app
+python /app/manage.py --settings=config.settings.production collectstatic --noinput
+/usr/local/bin/gunicorn config.wsgi --bind 0.0.0.0:5000 --chdir=/app
