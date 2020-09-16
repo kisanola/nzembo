@@ -4,8 +4,6 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.views.generic import TemplateView
 from django.views import defaults as default_views
-
-from rest_framework import permissions
 from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework.documentation import include_docs_urls
 
@@ -41,16 +39,6 @@ urlpatterns += [
     path("api/", include("config.api_router")),
     path("auth-token/", obtain_auth_token),
     path("api-docs/", include_docs_urls(title="backend REST API", public=False)),
-]
-
-urlpatterns += [
-    re_path(r"^api/v1/song/", include("backend.song.api.urls", namespace="song")),
-    re_path(r"^api/v1/users/", include("backend.users.api.urls", namespace="users_api")),
-]
-urlpatterns += [
-    re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
-    re_path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
 
 if settings.DEBUG:

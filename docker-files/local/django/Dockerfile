@@ -17,10 +17,6 @@ RUN apt-get update \
 COPY ./requirements /requirements
 RUN pip install -r /requirements/local.txt
 
-COPY ./docker-files/production/django/entrypoint /entrypoint
-RUN sed -i 's/\r$//g' /entrypoint
-RUN chmod +x /entrypoint
-
 COPY ./docker-files/local/django/start /start
 RUN sed -i 's/\r$//g' /start
 RUN chmod +x /start
@@ -39,4 +35,3 @@ RUN chmod +x /start-flower
 
 WORKDIR /app
 
-ENTRYPOINT ["/entrypoint"]
