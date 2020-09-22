@@ -5,8 +5,7 @@ from django.contrib import admin
 from django.views.generic import TemplateView
 from django.views import defaults as default_views
 from rest_framework.authtoken.views import obtain_auth_token
-from rest_framework.documentation import include_docs_urls
-
+from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
@@ -32,14 +31,24 @@ urlpatterns = [
     path("about/", TemplateView.as_view(template_name="pages/about.html"), name="about"),
     path("users/", include("backend.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
-    path(settings.ADMIN_URL, admin.site.urls),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-urlpatterns += [
     path("api/", include("config.api_router")),
     path("auth-token/", obtain_auth_token),
-    path("api-docs/", include_docs_urls(title="backend REST API", public=False)),
+    path(settings.ADMIN_URL, admin.site.urls),
+    static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 ]
+
+swagger_urls = [
+    re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    re_path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+]
+
+apis_urls = [
+    re_path(r"^api/v1/song/", include("backend.song.api.urls", namespace="song")),
+    re_path(r"^api/v1/users/", include("backend.users.api.urls", namespace="users_api")),
+]
+
+urlpatterns += swagger_urls + apis_urls
 
 if settings.DEBUG:
     # This allows the error pages to be debugged during development, just visit
