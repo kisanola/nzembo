@@ -2,8 +2,6 @@ version: '3'
 
 volumes:
   local_postgres_data: {}
-  local_postgres_data_backups: {}
-
 services:
   django: &django
     restart: always
@@ -16,52 +14,39 @@ services:
     volumes:
       - .:/app
     env_file:
-      - ./.envs/.local/.django
-      - ./.envs/.local/.postgres
+      - ./.env
     ports:
-      - "8000:8000"
+      - "8084:8000"
     command: /start
-
   postgres:
     restart: always
-    build:
-      context: .
-      dockerfile: ./docker-files/production/postgres/Dockerfile
-    image: backend_production_postgres
+    image: postgres:latest
     volumes:
-      - local_postgres_data:/var/lib/postgresql/data
-      - local_postgres_data_backups:/backups
-    env_file:
-      - ./.envs/.local/.postgres
+      - local_postgres_data:/var/lib/postgresql/data/
+    env_file: .env
+    ports:
+      - "5435:5432"
+    expose:
+      - '5435'
 
   redis:
     image: redis:5.0
 
   celeryworker:
-    <<: *django
-    restart: always
     image: backend_local_celeryworker
     depends_on:
       - redis
       - postgres
-      
-    ports: []
     command: /start-celeryworker
 
   celerybeat:
-    <<: *django
-    restart: always
     image: backend_local_celerybeat
     depends_on:
       - redis
       - postgres
-      
-    ports: []
     command: /start-celerybeat
 
   flower:
-    <<: *django
-    restart: always
     image: backend_local_flower
     ports:
       - "5555:5555"

@@ -4,11 +4,8 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.views.generic import TemplateView
 from django.views import defaults as default_views
-
-from rest_framework import permissions
 from rest_framework.authtoken.views import obtain_auth_token
-from rest_framework.documentation import include_docs_urls
-
+from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
@@ -31,41 +28,28 @@ schema_view = get_schema_view(
 urlpatterns = [
     path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
     re_path(r'^app/(?P<route>.*)$', TemplateView.as_view(template_name="index.html"), name='app'),
-
-    # User management from django-all-auth
     path("about/", TemplateView.as_view(template_name="pages/about.html"), name="about"),
     path("users/", include("backend.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
-
-    # Django Admin, use {% url 'admin:index' %}
-    path(settings.ADMIN_URL, admin.site.urls),
-
-    # Your stuff: custom urls includes go here
-
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-# API URLS
-urlpatterns += [
-    # API base url
     path("api/", include("config.api_router")),
-    # DRF auth token
     path("auth-token/", obtain_auth_token),
-    # DRF API docs
-    path("api-docs/", include_docs_urls(title="backend REST API", public=False)),
+    path(settings.ADMIN_URL, admin.site.urls),
 ]
 
-# API URLS
-urlpatterns += [
-    re_path(r"^api/v1/song/", include("backend.song.api.urls", namespace="song")),
-    re_path(r"^api/v1/users/", include("backend.users.api.urls", namespace="users_api")),
-]
+media_files = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-# SWAGGER URLS
-urlpatterns += [
+swagger_urls = [
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     re_path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
+
+apis_urls = [
+    re_path(r"^api/v1/song/", include("backend.song.api.urls", namespace="song")),
+    re_path(r"^api/v1/users/", include("backend.users.api.urls", namespace="users_api")),
+]
+
+urlpatterns += swagger_urls + apis_urls + media_files
 
 if settings.DEBUG:
     # This allows the error pages to be debugged during development, just visit
