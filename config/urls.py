@@ -34,8 +34,9 @@ urlpatterns = [
     path("api/", include("config.api_router")),
     path("auth-token/", obtain_auth_token),
     path(settings.ADMIN_URL, admin.site.urls),
-    path(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 ]
+
+media_files = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 swagger_urls = [
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
@@ -48,7 +49,7 @@ apis_urls = [
     re_path(r"^api/v1/users/", include("backend.users.api.urls", namespace="users_api")),
 ]
 
-urlpatterns += swagger_urls + apis_urls
+urlpatterns += swagger_urls + apis_urls + media_files
 
 if settings.DEBUG:
     # This allows the error pages to be debugged during development, just visit

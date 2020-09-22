@@ -30,8 +30,19 @@ USE_L10N = True
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 USE_TZ = True
 LOCALE_PATHS = [ROOT_DIR.path("locale")]
+
 DATABASES = {
-    'default': dj_database_url.config(conn_max_age=600),
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ.get('POSTGRES_NAME', 'postgres'),
+        'USER': os.environ.get('POSTGRES_USER', 'postgres'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'password'),
+        'HOST': os.environ.get('POSTGRES_HOST', 'localhost'),
+        'PORT': os.environ.get('POSTGRES_PORT', '5432'),
+        'TEST': {
+            'NAME': 'nzembo_test'
+        }
+    },
 }
 
 if os.environ.get('GITHUB_WORKFLOW'):
