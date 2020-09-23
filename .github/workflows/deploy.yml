@@ -1,0 +1,23 @@
+name: deploy to the host 
+on: 
+  pull_request:
+    branches: [ master ]
+  push:
+    branches:
+      - '*'
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Push to server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            whoami
+            ls -al
+            echo 'I am inside my virtual machine let me do anything I want'
