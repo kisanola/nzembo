@@ -9,8 +9,8 @@ this plateform gives users the ability to upload songs and theirs lyrics
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
      :target: https://github.com/ambv/black
      :alt: Black code style
-.. image:: ./coverage.svg
-    : alt: Code coverage
+.. image:: https://github.com/kisanola/nzembo/blob/core/01/add-badges/coverage.svg
+     :alt: Code coverage
 
 :License: MIT
 
