@@ -12,21 +12,6 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
-    # https://hacksoft.io/github-actions-in-action-setting-up-django-and-postgres/
-    services:
-      postgres:
-        image: postgres:10.8
-        env:
-          POSTGRES_USER: ${{ secrets.POSTGRES_DB_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_DB_PASS }}
-          POSTGRES_DB: ${{ secrets.POSTGRES_DB_NAME }}
-        ports:
-          - 5432:5432
-        # needed because the postgres container does not provide a healthcheck
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-
-
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python python-version
@@ -40,7 +25,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements/local.txt
     
-    
+    - uses: harmon758/postgresql-action@v1
+      with:
+        postgresql version: '11'
     - name: Run migrations
       run: python manage.py migrate
     
