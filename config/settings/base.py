@@ -56,6 +56,7 @@ if os.environ.get('GITHUB_WORKFLOW'):
            'PORT': '5432',
         }
     }
+    
 ROOT_URLCONF = "config.urls"
 
 WSGI_APPLICATION = "config.wsgi.application"
