@@ -47,12 +47,15 @@ DATABASES = {
 
 if os.environ.get('GITHUB_WORKFLOW'):
     DATABASES = {
-        'default': dj_database_url.parse(
-            'postgresql://db_admin:8935a847a2dbdcdd78181d6342733913@127.0.0.1:5432/coverage_test',
-            conn_max_age=600
-        )
+        'default': {
+           'ENGINE': 'django.db.backends.postgresql',
+           'NAME': 'github_actions',
+           'USER': 'postgres',
+           'PASSWORD': 'postgres',
+           'HOST': '127.0.0.1',
+           'PORT': '5432',
+        }
     }
-
 ROOT_URLCONF = "config.urls"
 
 WSGI_APPLICATION = "config.wsgi.application"
