@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v2.x
       - name: Push to server
         uses: appleboy/ssh-action@master
         env:
@@ -20,7 +22,8 @@ jobs:
           DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
           DJANGO_ADMIN_URL: ${{ secrets.DJANGO_ADMIN_URL }}
           DJANGO_ALLOWED_HOSTS: ${{ secrets.DJANGO_ALLOWED_HOSTS }}
-          CURRENT_BRANCH: ${{ secrets.GITHUB_HEAD_REF }}
+          CURRENT_BRANCH: ${{ github.ref }}
+          REDIS_URL: ${{ secrets.REDIS_URL }}
           TEST_ENV: 'test en'
           SHA: ${{ github.sha }}
         with:
@@ -28,18 +31,20 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
-          envs: SHA,POSTGRES_DATABASE,POSTGRES_HOST,POSTGRES_PASSWORD,POSTGRES_USER,DJANGO_SECRET_KEY,DJANGO_ADMIN_URL,DJANGO_ALLOWED_HOSTS,CURRENT_BRANCH
+          envs: REDIS_URL,SHA,POSTGRES_DATABASE,POSTGRES_HOST,POSTGRES_PASSWORD,POSTGRES_USER,DJANGO_SECRET_KEY,DJANGO_ADMIN_URL,DJANGO_ALLOWED_HOSTS,CURRENT_BRANCH
           script: | # the branch name needs to be refractored 
             echo " I am testing this if it is true  ==== > $SHA"
             cd ~/Projects/nzembo
             git pull origin $CURRENT_BRANCH --rebase
             rm -fr .env.production
+            echo CURRENT_BRANCH=$CURRENT_BRANCH >> .env.production
             echo POSTGRES_HOST=$POSTGRES_HOST >> .env.production
             echo SHA=$SHA >> .env.production
             echo REDIS_URL=$REDIS_URL >> .env.production
             echo POSTGRES_DATABASE=$POSTGRES_DATABASE >> .env.production
             echo POSTGRES_USER=$POSTGRES_USER >> .env.production
             echo POSTGRES_PASSWORD=$POSTGRES_PASSWORD >> .env.production
+            echo POSTGRES_PORT=$POSTGRES_PORT >> .env.production
             echo DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY >> .env.production
             echo DJANGO_ADMIN_URL=$DJANGO_ADMIN_URL >> .env.production
             echo DJANGO_ALLOWED_HOSTS=$DJANGO_ALLOWED_HOSTS >> .env.production

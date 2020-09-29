@@ -34,7 +34,7 @@ LOCALE_PATHS = [ROOT_DIR.path("locale")]
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get('POSTGRES_NAME', 'postgres'),
+        'NAME': os.environ.get('POSTGRES_DATABASE', 'postgres'),
         'USER': os.environ.get('POSTGRES_USER', 'postgres'),
         'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'password'),
         'HOST': os.environ.get('POSTGRES_HOST', 'localhost'),
@@ -53,7 +53,7 @@ if os.environ.get('GITHUB_WORKFLOW'):
            'USER': 'postgres',
            'PASSWORD': 'postgres',
            'HOST': '127.0.0.1',
-           'PORT': '5432',
+           'PORT': '5436',
         }
     }
     
