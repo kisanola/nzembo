@@ -18,9 +18,9 @@ jobs:
       postgres:
         image: postgres:10.8
         env:
-          POSTGRES_USER: ${{ secrets.POSTGRES_DB_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_DB_PASS }}
-          POSTGRES_DB: ${{ secrets.POSTGRES_DB_NAME }}
+          POSTGRES_USER: ${{ secrets.WORKFLOW_POSTGRES_DB_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.WORKFLOW_POSTGRES_DB_PASS }}
+          POSTGRES_DB: ${{ secrets.WORKFLOW_POSTGRES_DB_NAME }}
         ports:
           - 5432:5432
         # needed because the postgres container does not provide a healthcheck
