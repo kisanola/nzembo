@@ -12,7 +12,7 @@ this plateform gives users the ability to upload songs and theirs lyrics
 .. image:: https://api.codeclimate.com/v1/badges/36f4e095f1f4d52a1e8b/maintainability
      :target: https://codeclimate.com/github/kisanola/nzembo/maintainability
      :alt: Maintainability
-.. image:: https://github.com/kisanola/nzembo/blob/core/01/add-badges/coverage.svg
+.. image:: https://github.com/kisanola/nzembo/blob/master/coverage.svg
      :alt: Code coverage
 
 :License: MIT
