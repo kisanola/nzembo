@@ -59,9 +59,6 @@ class UserLyricsView(ListModelMixin, GenericViewSet):
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user)
 
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
-
 
 class UserLyricRequestView(ListModelMixin, GenericViewSet):
 
@@ -72,6 +69,3 @@ class UserLyricRequestView(ListModelMixin, GenericViewSet):
 
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user)
-
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
