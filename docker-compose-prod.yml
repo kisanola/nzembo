@@ -26,7 +26,7 @@ services:
     expose:
       - '5432'
   nginx:
-    build: ./production/nginx
+    build: ./docker-files/production/nginx
     ports:
      - "81:80"
      - "8081:8080"
