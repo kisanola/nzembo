@@ -44,6 +44,8 @@ jobs:
             echo DJANGO_ALLOWED_HOSTS=$DJANGO_ALLOWED_HOSTS >> .env.production
             echo "done setting up the enviroment variables "
             cat .env.production
+            echo 'building the container '
+            docker-compose -f docker-compose-prod.yml up -d --build   
             
             
 
