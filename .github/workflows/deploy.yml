@@ -36,6 +36,7 @@ jobs:
             rm -fr .env.production
             echo POSTGRES_HOST=$POSTGRES_HOST >> .env.production
             echo SHA=$SHA >> .env.production
+            echo REDIS_URL=$REDIS_URL >> .env.production
             echo POSTGRES_DATABASE=$POSTGRES_DATABASE >> .env.production
             echo POSTGRES_USER=$POSTGRES_USER >> .env.production
             echo POSTGRES_PASSWORD=$POSTGRES_PASSWORD >> .env.production
