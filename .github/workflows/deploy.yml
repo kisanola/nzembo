@@ -32,7 +32,7 @@ jobs:
           script: | # the branch name needs to be refractored 
             echo " I am testing this if it is true  ==== > $SHA"
             cd ~/Projects/nzembo
-            git pull origin build-automate-the-deployment-on-vps --rebase
+            git pull origin $CURRENT_BRANCH --rebase
             rm -fr .env.production
             echo POSTGRES_HOST=$POSTGRES_HOST >> .env.production
             echo SHA=$SHA >> .env.production
