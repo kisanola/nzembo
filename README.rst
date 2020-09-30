@@ -57,6 +57,10 @@ To run the tests, check your test coverage, and generate an HTML coverage report
     $ coverage html
     $ open htmlcov/index.html
 
+    OR
+
+    $ make test
+
 Running tests with py.test
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
