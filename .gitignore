@@ -332,6 +332,7 @@ backend/media/
 
 .ipython/
 .env.production
+.env.test
 .env
 .envs/*
 

@@ -48,7 +48,7 @@ jobs:
             echo DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY >> .env.production
             echo DJANGO_ADMIN_URL=$DJANGO_ADMIN_URL >> .env.production
             echo DJANGO_ALLOWED_HOSTS=$DJANGO_ALLOWED_HOSTS >> .env.production
-            echo "done setting up the enviroment variables "
+            echo "done setting up the enviroments variables "
             cat .env.production
             echo 'building the container '
             docker-compose -f docker-compose-prod.yml up -d --build   

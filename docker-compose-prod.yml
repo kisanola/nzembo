@@ -10,21 +10,10 @@ services:
       dockerfile: ./docker-files/production/django/Dockerfile
     image: backend_production_django
     depends_on:
-      - postgres
       - redis
     env_file:
       - ./.env.production
     command: /start
-  postgres:
-    restart: always
-    image: postgres:latest
-    volumes:
-      - production_postgres_data:/var/lib/postgresql/data/
-    env_file: ./.env.production
-    ports:
-      - "5433:5432"
-    expose:
-      - '5432'
   nginx:
     build: ./docker-files/production/nginx
     ports:
