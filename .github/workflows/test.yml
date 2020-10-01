@@ -10,8 +10,12 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
+    env:
+      POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
+      POSTGRES_DATABASE: ${{ secrets.POSTGRES_DATABASE_TEST }}
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python python-version
@@ -23,11 +27,6 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements/local.txt
     - name: Run migrations
-      env:
-          POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
-          POSTGRES_DATABASE: ${{ secrets.POSTGRES_DATABASE_TEST }}
-          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
       run: python manage.py migrate
     - name: Run Tests
       run: |

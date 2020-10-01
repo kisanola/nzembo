@@ -3,7 +3,6 @@ Base settings to build other settings files upon.
 """
 import os
 import environ
-import dj_database_url
 
 ROOT_DIR = (
     environ.Path(__file__) - 3
@@ -40,23 +39,11 @@ DATABASES = {
         'HOST': os.environ.get('POSTGRES_HOST', 'localhost'),
         'PORT': os.environ.get('POSTGRES_PORT', '5432'),
         'TEST': {
-            'NAME': 'nzembo_test'
+            'NAME': os.environ.get('POSTGRES_DATABASE_TEST', 'postgres'),
         }
     },
 }
 
-if os.environ.get('GITHUB_WORKFLOW'):
-    DATABASES = {
-        'default': {
-           'ENGINE': 'django.db.backends.postgresql',
-           'NAME': 'github_actions',
-           'USER': 'postgres',
-           'PASSWORD': 'postgres',
-           'HOST': '127.0.0.1',
-           'PORT': '5436',
-        }
-    }
-    
 ROOT_URLCONF = "config.urls"
 
 WSGI_APPLICATION = "config.wsgi.application"
@@ -71,6 +58,7 @@ DJANGO_APPS = [
     "django.contrib.admin",
     "django.forms",
 ]
+
 THIRD_PARTY_APPS = [
     "crispy_forms",
     "allauth",
@@ -84,7 +72,6 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     "backend.users.apps.UsersConfig",
-    # Your stuff: custom apps go here
     "backend.song.apps.SongConfig",
 ]
 
