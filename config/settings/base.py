@@ -117,11 +117,10 @@ MIDDLEWARE = [
 ]
 STATIC_ROOT = str(ROOT_DIR("staticfiles"))
 
-STATIC_URL = "/static/"
+STATIC_URL = "/"
 
 STATICFILES_DIRS = [
     str(APPS_DIR.path("static")),
-    str(REACT_APP_DIR.path("dist")),
 ]
 
 STATICFILES_FINDERS = [

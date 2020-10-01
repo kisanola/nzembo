@@ -31,8 +31,6 @@ jobs:
     - name: Run Tests
       run: |
         pytest
-    
-    
     - name: Code Coverage Checking
       uses: tadomikikuto-bit/django-coveragepy-github-action@master
       with:
