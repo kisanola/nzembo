@@ -48,6 +48,8 @@ jobs:
             echo DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY >> .env.production
             echo DJANGO_ADMIN_URL=$DJANGO_ADMIN_URL >> .env.production
             echo DJANGO_ALLOWED_HOSTS=$DJANGO_ALLOWED_HOSTS >> .env.production
+            echo MAILGUN_API_KEY='this needs to be updated'  >> .env.production
+            echo MAILGUN_DOMAIN=murhabazi.com   >> .env.production
             echo "done setting up the enviroments variables "
             cat .env.production
             echo 'building the container '

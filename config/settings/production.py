@@ -5,14 +5,14 @@ env = Env()
 
 env.read_env(str(ROOT_DIR.path(".env.production")))  #noqa
 
-SECRET_KEY = env("DJANGO_SECRET_KEY")
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["murhabazi.com"])
 
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": env("REDIS_URL"),
+        "LOCATION": os.environ.get("REDIS_URL"),
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
             # Mimicing memcache behavior.
@@ -53,22 +53,22 @@ TEMPLATES[-1]["OPTIONS"]["loaders"] = [  # type: ignore[index] # noqa F405
         ],
     )
 ]
-DEFAULT_FROM_EMAIL = env(
+DEFAULT_FROM_EMAIL = os.environ.get(
     "DJANGO_DEFAULT_FROM_EMAIL", default="song_lyrics_plateform <noreply@murhabazi.com>"
 )
 
-SERVER_EMAIL = env("DJANGO_SERVER_EMAIL", default=DEFAULT_FROM_EMAIL)
+SERVER_EMAIL = os.environ.get("DJANGO_SERVER_EMAIL", default=DEFAULT_FROM_EMAIL)
 
-EMAIL_SUBJECT_PREFIX = env(
+EMAIL_SUBJECT_PREFIX = os.environ.get(
     "DJANGO_EMAIL_SUBJECT_PREFIX", default="[song_lyrics_plateform]"
 )
-ADMIN_URL = env("DJANGO_ADMIN_URL")
+ADMIN_URL = os.environ.get("DJANGO_ADMIN_URL")
 INSTALLED_APPS += ["anymail"]  # noqa F405
 EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"
 ANYMAIL = {
-    "MAILGUN_API_KEY": env("MAILGUN_API_KEY"),
-    "MAILGUN_SENDER_DOMAIN": env("MAILGUN_DOMAIN"),
-    "MAILGUN_API_URL": env("MAILGUN_API_URL", default="https://api.mailgun.net/v3"),
+    "MAILGUN_API_KEY": os.environ.get("MAILGUN_API_KEY"),
+    "MAILGUN_SENDER_DOMAIN": os.environ.get("MAILGUN_DOMAIN"),
+    "MAILGUN_API_URL": os.environ.get("MAILGUN_API_URL", default="https://api.mailgun.net/v3"),
 }
 LOGGING = {
     "version": 1,
