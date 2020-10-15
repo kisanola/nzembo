@@ -13,9 +13,13 @@ services:
       - redis
     env_file:
       - ./.env.production
+    ports:
+     - "5000:5000"
     command: /start
   nginx:
-    build: ./docker-files/production/nginx
+    build: 
+      context: .
+      dockerfile : ./docker-files/production/nginx/Dockerfile
     ports:
      - "81:80"
      - "8081:8080"
@@ -27,15 +31,12 @@ services:
   redis:
     image: redis:5.0
   celery_worker:
-    <<: *django
     image: backend_production_celeryworker
     command: /start-celeryworker
   celery_beat:
-    <<: *django
     image: backend_production_celerybeat
     command: /start-celerybeat
   flower:
-    <<: *django
     image: backend_production_flower
     ports:
       - "5555:5555"
