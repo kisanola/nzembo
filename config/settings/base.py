@@ -8,7 +8,7 @@ ROOT_DIR = (
     environ.Path(__file__) - 3
 )  # (backend/config/settings/base.py - 3 = backend/)
 APPS_DIR = ROOT_DIR.path("backend")
-REACT_APP_DIR = ROOT_DIR.path("frontend")
+VUE_APP_DIR = ROOT_DIR.path("frontend")
 
 env = environ.Env()
 
@@ -68,6 +68,7 @@ THIRD_PARTY_APPS = [
     "corsheaders",
     "django_filters",
     "django_celery_beat",
+    "debug_toolbar"
 ]
 
 LOCAL_APPS = [
@@ -115,20 +116,17 @@ MIDDLEWARE = [
     "django.middleware.common.BrokenLinkEmailsMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
-STATIC_ROOT = str(ROOT_DIR("staticfiles"))
 
-STATIC_URL = "/"
-
-STATICFILES_DIRS = [
-    str(APPS_DIR.path("static")),
-]
+STATIC_URL = '/static/'
+# Place static in the same location as webpack build files
+STATIC_ROOT = os.path.join(BASE_DIR, 'frontend', 'dist', 'static')
+STATICFILES_DIRS = [str(APPS_DIR.path("static"))]
 
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
 MEDIA_ROOT = str(APPS_DIR("media"))
-
 MEDIA_URL = "/media/"
 TEMPLATES = [
     {
@@ -137,7 +135,7 @@ TEMPLATES = [
         # https://docs.djangoproject.com/en/dev/ref/settings/#template-dirs
         "DIRS": [
             str(APPS_DIR.path("templates")),
-            str(REACT_APP_DIR.path("build")),
+            str(VUE_APP_DIR.path("dist")),
         ],
         "OPTIONS": {
             # https://docs.djangoproject.com/en/dev/ref/settings/#template-loaders

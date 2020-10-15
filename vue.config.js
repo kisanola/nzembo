@@ -2,7 +2,7 @@ const path = require("path");
 
 module.exports = {
   outputDir: "frontend/dist",
-  assetsDir: "frontend/static",
+  assetsDir: "static",
   // baseUrl: IS_PRODUCTION
   // ? 'http://cdn123.com'
   // : '/',
