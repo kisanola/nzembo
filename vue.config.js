@@ -14,7 +14,7 @@ module.exports = {
     proxy: {
       "/api*": {
         // Forward frontend dev server request for /api to django dev server
-        target: "http://localhost:8000/",
+        target: "http://80.208.230.111:5000/",
       },
     },
   },
