@@ -7,7 +7,7 @@ env.read_env(str(ROOT_DIR.path(".env.production")))  #noqa
 
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
-ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["murhabazi.com"])
+ALLOWED_HOSTS = [str(os.environ.get('DJANGO_ALLOWED_HOSTS'))]
 
 CACHES = {
     "default": {
