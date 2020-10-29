@@ -26,7 +26,7 @@ schema_view = get_schema_view(
 
 
 urlpatterns = [
-    path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
+    path("", TemplateView.as_view(template_name="index.html"), name="home"),
     re_path(r'^app/(?P<route>.*)$', TemplateView.as_view(template_name="index.html"), name='app'),
     path("about/", TemplateView.as_view(template_name="pages/about.html"), name="about"),
     path("users/", include("backend.users.urls", namespace="users")),

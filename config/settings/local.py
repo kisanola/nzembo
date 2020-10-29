@@ -6,7 +6,8 @@ SECRET_KEY = env(
     "DJANGO_SECRET_KEY",
     default="lTjHr0gByRvtVrSrzIZXbHHUDY0Dqu5sOCitAPSmRYmzK7SBwi3aFg9tfk8aGW7D",
 )
-ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
+ALLOWED_HOSTS = ["*"]
+
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",

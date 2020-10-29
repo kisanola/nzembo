@@ -10,23 +10,16 @@ services:
       dockerfile: ./docker-files/production/django/Dockerfile
     image: backend_production_django
     depends_on:
-      - postgres
       - redis
     env_file:
       - ./.env.production
-    command: /start
-  postgres:
-    restart: always
-    image: postgres:latest
-    volumes:
-      - production_postgres_data:/var/lib/postgresql/data/
-    env_file: ./.env.production
     ports:
-      - "5433:5432"
-    expose:
-      - '5432'
+     - "5000:5000"
+    command: /start
   nginx:
-    build: ./production/nginx
+    build: 
+      context: .
+      dockerfile : ./docker-files/production/nginx/Dockerfile
     ports:
      - "81:80"
      - "8081:8080"
@@ -38,15 +31,12 @@ services:
   redis:
     image: redis:5.0
   celery_worker:
-    <<: *django
     image: backend_production_celeryworker
     command: /start-celeryworker
   celery_beat:
-    <<: *django
     image: backend_production_celerybeat
     command: /start-celerybeat
   flower:
-    <<: *django
     image: backend_production_flower
     ports:
       - "5555:5555"

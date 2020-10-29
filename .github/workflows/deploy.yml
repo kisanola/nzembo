@@ -1,0 +1,67 @@
+name: deploy to the host 
+on:
+  push:
+    branches:
+      - 'master'
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Copy repository to remote using scp
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          source: "."
+          target: "/home/espoir/Projects/nzembo"
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v2.x
+      - name: Push to server
+        uses: appleboy/ssh-action@master
+        env:
+          POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
+          POSTGRES_DATABASE: ${{ secrets.POSTGRES_DATABASE }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          DJANGO_ADMIN_URL: ${{ secrets.DJANGO_ADMIN_URL }}
+          DJANGO_ALLOWED_HOSTS: ${{ secrets.DJANGO_ALLOWED_HOSTS }}
+          CURRENT_BRANCH: ${{ github.ref }}
+          REDIS_URL: ${{ secrets.REDIS_URL }}
+          TEST_ENV: 'test en'
+          SHA: ${{ github.sha }}
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          envs: REDIS_URL,SHA,POSTGRES_DATABASE,POSTGRES_HOST,POSTGRES_PASSWORD,POSTGRES_USER,DJANGO_SECRET_KEY,DJANGO_ADMIN_URL,DJANGO_ALLOWED_HOSTS,CURRENT_BRANCH
+          script: | # the branch name needs to be refractored 
+            echo " I am testing this if it is true  ==== > $SHA"
+            cd ~/Projects/nzembo
+            rm -fr .env.production
+            echo CURRENT_BRANCH=$CURRENT_BRANCH >> .env.production
+            echo POSTGRES_HOST=$POSTGRES_HOST >> .env.production
+            echo SHA=$SHA >> .env.production
+            echo REDIS_URL=$REDIS_URL >> .env.production
+            echo POSTGRES_DATABASE=$POSTGRES_DATABASE >> .env.production
+            echo POSTGRES_USER=$POSTGRES_USER >> .env.production
+            echo POSTGRES_PASSWORD=$POSTGRES_PASSWORD >> .env.production
+            echo POSTGRES_PORT=$POSTGRES_PORT >> .env.production
+            echo DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY >> .env.production
+            echo DJANGO_ADMIN_URL=$DJANGO_ADMIN_URL >> .env.production
+            echo DJANGO_ALLOWED_HOSTS=$DJANGO_ALLOWED_HOSTS >> .env.production
+            echo MAILGUN_API_KEY='this needs to be updated'  >> .env.production
+            echo MAILGUN_DOMAIN=murhabazi.com   >> .env.production
+            echo "done setting up the enviroments variables "
+            cat .env.production
+            echo 'building the container '
+            docker-compose -f docker-compose-prod.yml stop
+            docker-compose -f docker-compose-prod.yml rm --force
+            docker-compose -f docker-compose-prod.yml up --force-recreate -d --build  
+            
+            
+

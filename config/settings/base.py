@@ -3,13 +3,12 @@ Base settings to build other settings files upon.
 """
 import os
 import environ
-import dj_database_url
 
 ROOT_DIR = (
     environ.Path(__file__) - 3
 )  # (backend/config/settings/base.py - 3 = backend/)
 APPS_DIR = ROOT_DIR.path("backend")
-REACT_APP_DIR = ROOT_DIR.path("frontend")
+VUE_APP_DIR = ROOT_DIR.path("frontend")
 
 env = environ.Env()
 
@@ -34,24 +33,16 @@ LOCALE_PATHS = [ROOT_DIR.path("locale")]
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get('POSTGRES_NAME', 'postgres'),
+        'NAME': os.environ.get('POSTGRES_DATABASE', 'postgres'),
         'USER': os.environ.get('POSTGRES_USER', 'postgres'),
         'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'password'),
-        'HOST': os.environ.get('POSTGRES_HOST', 'localhost'),
+        'HOST': os.environ.get('POSTGRES_HOST', '127.0.0.1'),
         'PORT': os.environ.get('POSTGRES_PORT', '5432'),
         'TEST': {
-            'NAME': 'nzembo_test'
+            'NAME': os.environ.get('POSTGRES_DATABASE_TEST', 'postgres'),
         }
     },
 }
-
-if os.environ.get('GITHUB_WORKFLOW'):
-    DATABASES = {
-        'default': dj_database_url.parse(
-            'postgresql://db_admin:8935a847a2dbdcdd78181d6342733913@127.0.0.1:5432/coverage_test',
-            conn_max_age=600
-        )
-    }
 
 ROOT_URLCONF = "config.urls"
 
@@ -67,6 +58,7 @@ DJANGO_APPS = [
     "django.contrib.admin",
     "django.forms",
 ]
+
 THIRD_PARTY_APPS = [
     "crispy_forms",
     "allauth",
@@ -76,11 +68,11 @@ THIRD_PARTY_APPS = [
     "corsheaders",
     "django_filters",
     "django_celery_beat",
+    "debug_toolbar"
 ]
 
 LOCAL_APPS = [
     "backend.users.apps.UsersConfig",
-    # Your stuff: custom apps go here
     "backend.song.apps.SongConfig",
 ]
 
@@ -124,21 +116,17 @@ MIDDLEWARE = [
     "django.middleware.common.BrokenLinkEmailsMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
-STATIC_ROOT = str(ROOT_DIR("staticfiles"))
 
-STATIC_URL = "/static/"
-
-STATICFILES_DIRS = [
-    str(APPS_DIR.path("static")),
-    str(REACT_APP_DIR.path("dist")),
-]
+STATIC_URL = '/static/'
+# Place static in the same location as webpack build files
+STATIC_ROOT = os.path.join(BASE_DIR, 'frontend', 'dist', 'static')
+STATICFILES_DIRS = [str(APPS_DIR.path("static"))]
 
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
 MEDIA_ROOT = str(APPS_DIR("media"))
-
 MEDIA_URL = "/media/"
 TEMPLATES = [
     {
@@ -147,7 +135,7 @@ TEMPLATES = [
         # https://docs.djangoproject.com/en/dev/ref/settings/#template-dirs
         "DIRS": [
             str(APPS_DIR.path("templates")),
-            str(REACT_APP_DIR.path("build")),
+            str(VUE_APP_DIR.path("dist")),
         ],
         "OPTIONS": {
             # https://docs.djangoproject.com/en/dev/ref/settings/#template-loaders
